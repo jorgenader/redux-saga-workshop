@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {Row, Col} from 'react-bootstrap';
 import {Icon} from 'react-fa';
 
-import {triggers} from 'ducks/counter';
+import {triggerIncrease, triggerDecrease, triggerReset} from 'sagas/CounterSaga';
 
 
 export const Counter = ({counter, onIncrease, onDecrease, onReset}) => (
@@ -38,9 +38,9 @@ const mapStateToProps = ({counter}) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onIncrease: () => dispatch(triggers.increase()),
-    onDecrease: () => dispatch(triggers.decrease()),
-    onReset: () => dispatch(triggers.reset()),
+    onIncrease: () => dispatch(triggerIncrease()),
+    onDecrease: () => dispatch(triggerDecrease()),
+    onReset: () => dispatch(triggerReset()),
 });
 
 const CounterConnector = connect(

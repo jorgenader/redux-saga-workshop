@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'channels_api',
 
     # Project apps
+    'todos',
 ]
 
 

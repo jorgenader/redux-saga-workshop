@@ -1,8 +1,14 @@
 import {select, put, all, takeLatest, takeEvery} from 'redux-saga/effects';
 
-import {
-    actions, TRIGGER_RESET, TRIGGER_INCREASE, TRIGGER_DECREASE,
-} from 'ducks/counter';
+import {actions} from 'ducks/counter';
+
+const TRIGGER_INCREASE = 'trigger/counter/increase';
+const TRIGGER_DECREASE = 'trigger/counter/decrease';
+const TRIGGER_RESET = 'trigger/counter/reset';
+
+export const triggerIncrease = () => ({type: TRIGGER_INCREASE});
+export const triggerDecrease = () => ({type: TRIGGER_DECREASE});
+export const triggerReset = () => ({type: TRIGGER_RESET});
 
 const selectCounter = ({counter}) => counter;
 
