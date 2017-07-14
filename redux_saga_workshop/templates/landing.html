@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="root">
+        <div class="loader">Loading...</div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}{{ block.super }}
+    <script>
+        ReduxSagaWorkshop.init();
+    </script>
+{% endblock %}

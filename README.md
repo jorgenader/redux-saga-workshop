@@ -1,14 +1,10 @@
 # README for Redux-Saga Workshop
 
-[![Build Status](https://drone-inside.thorgate.eu/api/badges/thorgate/redux_saga_workshop/status.svg)](https://drone-inside.thorgate.eu/thorgate/redux_saga_workshop)
-
-TODO: verify that the following info is correct:
-
  - Python:  3.6
  - DB:      PostgreSQL
- - Node:    6.10.x
+ - Node:    7.x
  - NPM:     3.x
- - React:   15.x
+ - React:   15.6
 
 Browser support is defined in the `redux_saga_workshop/browserslist` file that is used for autoprefixing CSS.
 

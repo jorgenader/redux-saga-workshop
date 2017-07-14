@@ -11,7 +11,7 @@ import string
 import os
 
 from fabric import colors
-from fabric.api import *
+from fabric.api import env, task, require, abort, sudo, prefix, cd, put, get
 from fabric.contrib.console import confirm
 from fabric.utils import indent
 
@@ -105,6 +105,7 @@ def test():
     """ TARGET: test server (staging)
     """
 
+    raise NotImplemented('TODO: test host not configured')
     defaults()
     env.hosts = ['TEST.TODO.com']
 
@@ -172,8 +173,8 @@ def migrate_diff(id=None, revset=None, silent=False):
     migrations = vcs.changed_files(revset, "\/(?P<model>\w+)\/migrations\/(?P<migration>.+)")
 
     if not silent and migrations:
-        print "Found %d migrations." % len(migrations)
-        print indent(migrations)
+        print("Found %d migrations." % len(migrations))
+        print(indent(migrations))
 
     return migrations
 
@@ -195,7 +196,7 @@ def version():
     require('code_dir')
 
     summary = get_current_version_summary()
-    print colors.yellow(summary)
+    print(colors.yellow(summary))
 
 
 @task
@@ -207,9 +208,9 @@ def deploy(id=None, silent=False, force=False, auto_nginx=True):
     if force:
         force = colors.blue('FORCED DEPLOY')
 
-        print '-' * 40
-        print force
-        print '-' * 40
+        print('-' * 40)
+        print(force)
+        print('-' * 40)
 
     # Ask for sudo at the beginning so we don't fail during deployment because of wrong pass
     if not sudo('whoami'):
@@ -224,43 +225,43 @@ def deploy(id=None, silent=False, force=False, auto_nginx=True):
     # See if we have any requirements changes
     requirements_changes = force or vcs.changed_files(revset, r' requirements/')
     if requirements_changes:
-        print colors.yellow("Will update requirements (and do migrations)")
+        print(colors.yellow("Will update requirements (and do migrations)"))
 
     # See if we have changes in app source or static files
     app_patterns = [r' redux_saga_workshop/app', r' redux_saga_workshop/static',
                     r' redux_saga_workshop/settings', r' redux_saga_workshop/package.json']
     app_changed = force or vcs.changed_files(revset, app_patterns)
     if app_changed:
-        print colors.yellow("Will run npm build")
+        print(colors.yellow("Will run npm build"))
 
     # See if we have any changes to migrations between the revisions we're applying
     migrations = force or migrate_diff(revset=revset, silent=True)
     if migrations:
-        print colors.yellow("Will apply %d migrations:" % len(migrations))
-        print indent(migrations)
+        print(colors.yellow("Will apply %d migrations:" % len(migrations)))
+        print(indent(migrations))
 
     # See if we have any changes to crontab config
     crontab_changed = force or vcs.changed_files(revset, r'deploy/crontab.conf')
     if crontab_changed:
-        print colors.yellow("Will update cron entries")
+        print(colors.yellow("Will update cron entries"))
 
     # See if we have any changes to letsencrypt configurations
     letsencrypt_changed = force or vcs.changed_files(revset, get_config_modified_patterns('letsencrypt'))
     if letsencrypt_changed:
-        print colors.yellow("Will update letsencrypt configurations")
+        print(colors.yellow("Will update letsencrypt configurations"))
 
     # see if nginx conf has changed
     nginx_changed = vcs.changed_files(revset, get_config_modified_patterns('nginx'))
 
     if nginx_changed:
         if auto_nginx:
-            print colors.yellow("Nginx configuration change detected, updating automatically")
+            print(colors.yellow("Nginx configuration change detected, updating automatically"))
 
         else:
-            print colors.red("Warning: Nginx configuration change detected, also run: `fab %target% nginx_update`")
+            print(colors.red("Warning: Nginx configuration change detected, also run: `fab %target% nginx_update`"))
 
     elif force:
-        print colors.yellow("Updating nginx config")
+        print(colors.yellow("Updating nginx config"))
 
     if not silent:
         request_confirm("deploy")

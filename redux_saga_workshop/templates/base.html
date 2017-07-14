@@ -46,30 +46,7 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <header class="navbar navbar-default navbar-static-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'home' %}">Redux-Saga Workshop</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if request.user.is_authenticated %}
-                        <li><a href="#">{{ request.user.name|default:request.user.email }}</a></li>
-                        <li><a href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
-                    {% else %}
-                        <li><a href="{% url 'login' %}">{% trans "Log in" %}</a></li>
-                    {% endif %}
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
-    </header>
-
-    <div class="container">
-        {% block content %}{% endblock content %}
-    </div>
+    {% block content %}{% endblock content %}
 
     {% render_bundle 'app' %}
     {% block scripts %}{% endblock scripts %}

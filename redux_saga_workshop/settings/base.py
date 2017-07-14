@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'channels',
+    'channels_api',
+
+    # Project apps
 ]
 
 
@@ -96,6 +102,16 @@ REDIS_PORT = 6379
 REDIS_DB = 1
 REDIS_URL = 'redis://%s:%d/%d' % (REDIS_HOST, REDIS_PORT, REDIS_DB)
 
+# Channels layer - Uses DB:0 by default
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
+        },
+        "ROUTING": "redux_saga_workshop.routing.channel_routing",
+    },
+}
 
 # Caching
 CACHES = {
@@ -150,6 +166,9 @@ AUTH_USER_MODEL = 'accounts.User'
 # Static site url, used when we need absolute url but lack request object, e.g. in email sending.
 SITE_URL = 'http://127.0.0.1:8000'
 ALLOWED_HOSTS = []
+
+API_BASE = 'api'
+API_VERSION = 'v1'
 
 # Don't allow site's content to be included in frames/iframes.
 X_FRAME_OPTIONS = 'DENY'
@@ -219,7 +238,6 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
 # Disable a few system checks. Careful with these, only silence what your really really don't need.
-# TODO: check if this is right for your project.
 SILENCED_SYSTEM_CHECKS = [
     'security.W001',  # we don't use SecurityMiddleware since security is better applied in nginx config
 ]

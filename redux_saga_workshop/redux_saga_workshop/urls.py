@@ -9,8 +9,7 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'', include('accounts.urls')),
-    url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
-
+    url(r'^%s/%s/' % (settings.API_BASE, settings.API_VERSION), include('api.urls', namespace='api')),
     url(r'^tagauks/', include(admin.site.urls)),
 ]
 
@@ -29,3 +28,8 @@ if settings.DEBUG:
         ]
     except ImportError:
         pass
+
+# SPA catch all (React-Router takes over after this)
+urlpatterns += [
+    url(r'^(.*)$', TemplateView.as_view(template_name='landing.html'), name='home'),
+]

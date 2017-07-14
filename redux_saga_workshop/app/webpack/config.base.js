@@ -1,3 +1,4 @@
+/* eslint-disable */
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -16,7 +17,7 @@ function makeConfig(options) {
         path: path.resolve(app_root, 'build'),
         filename: options.filenameTemplate + '.js',
         publicPath: options.publicPath,
-        library: 'redux_saga_workshop',
+        library: 'ReduxSagaWorkshop',
     };
 
     return {

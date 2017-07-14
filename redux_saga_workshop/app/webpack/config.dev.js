@@ -1,7 +1,9 @@
+/* eslint-disable */
 const path = require('path');
 const webpack = require('webpack');
 
 const makeConfig = require('./config.base');
+const localPaths = require('./localPaths');
 
 
 // The app/ dir
@@ -16,14 +18,22 @@ const config = makeConfig({
 
     extractCss: false,
     minifyCss: false,
+    profile: true,
 
-    // Needed for inline CSS (via JS) - see set-public-path.js for more info
-    prependSources: [path.resolve(app_root, 'webpack', 'set-public-path.js')],
+    prependSources: [
+        'react-hot-loader/patch',
+        `webpack-dev-server/client?${localPaths.PUBLIC_PATH}`,
+        'webpack/hot/only-dev-server',
+    ],
 
     // This must be same as Django's STATIC_URL setting
-    publicPath: '/static/',
+    publicPath: `${localPaths.PUBLIC_PATH}/static/`,
 
-    plugins: [],
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+    ],
 });
 console.log("Using DEV config");
 

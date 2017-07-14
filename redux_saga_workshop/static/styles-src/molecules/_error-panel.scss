@@ -1,0 +1,36 @@
+.page-error-wrapper {
+    margin: 250px auto;
+
+    .panel {
+        margin-bottom: 20px;
+        background-color: #FFFFFF;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .panel {
+        border: 1px solid #ECECEC;
+        border-radius: 4px;
+        box-shadow: none;
+        padding: 50px;
+    }
+
+    .panel-shadow {
+        box-shadow: 2px 7px 7px rgba(0, 0, 0, 0.04);
+    }
+
+    .panel-message {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 500px;
+        margin-top: 45px;
+        padding: 30px 40px 50px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .panel-message .text-muted {
+        color: #AAAAAA;
+    }
+}

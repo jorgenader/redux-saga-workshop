@@ -2,7 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Raven from 'raven-js';
 
-import HelloWorld from 'components/HelloWorld';
+import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
+import {AppContainer} from 'react-hot-loader';
+
+import App from 'containers/App';
+import configureStore from 'configuration/configureStore';
 
 
 // Install Raven in production envs
@@ -22,15 +27,35 @@ if (process.env.NODE_ENV === 'production') {
     }
 }
 
-
-function init() {
-    const elem = document.getElementById("hello-container");
-    if (!elem) {
-        return;
-    }
-
-    ReactDOM.render(<HelloWorld />, elem);
+// We want to handle scroll restoration on our own (this only really works in Chrome)
+// So sry Chrome users
+if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
 }
 
+const store = configureStore();
+
+const render = (Component) => {
+    ReactDOM.render(
+        <AppContainer>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Component />
+                </BrowserRouter>
+            </Provider>
+        </AppContainer>,
+        document.getElementById('root'));
+};
+
+if (module.hot) {
+    module.hot.accept('./containers/App', () => {
+        const RootElement = require('./containers/App').default; // eslint-disable-line
+        render(RootElement);
+    });
+}
+
+function init() {
+    render(App);
+}
 
 export {init}; // eslint-disable-line import/prefer-default-export
