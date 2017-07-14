@@ -22,4 +22,5 @@ new WebpackDevServer(webpack(config), {
     }
 
     console.log(`Listening at ${localPaths.HOST}:${localPaths.PORT}`);
+    console.log(`Exposed at ${localPaths.PUBLIC_PATH}`);
 });

@@ -59,6 +59,7 @@
   },
   "scripts": {
     "dev": "cd app && node webpack/server.js",
+    "dev-docker": "cd app && HOST_ADDR=django_node node webpack/server.js",
     "build-dev": "cd app && webpack --config webpack/config.dev.js --progress --profile --color",
     "build": "cd app && webpack -p --config webpack/config.production.js --progress --profile --color",
     "build-quiet": "cd app && webpack -p --config webpack/config.production.js",
