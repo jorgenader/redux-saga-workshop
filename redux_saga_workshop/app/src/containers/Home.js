@@ -1,19 +1,21 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import {Link} from 'react-router-dom';
 import {Row, Col} from 'react-bootstrap';
 
 import withPage from 'decorators/withPage';
 
 
-const Home = ({}) => (
+const Home = () => (
     <div className="page-container">
         <Helmet title="Home" />
         <Row>
-            <Col md={12}>This is landing page.</Col>
             <Col md={12}>
+                This is some extra info or list of references.
+                TODOS:
                 <ul>
-                    <li><Link to="/counter">Counter example</Link></li>
+                    <li>Convert Todo's to use only sagas.</li>
+                    <li>Mk2</li>
+                    <li>Mk3</li>
                 </ul>
             </Col>
         </Row>

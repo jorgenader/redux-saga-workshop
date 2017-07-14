@@ -8,6 +8,9 @@
 
 Browser support is defined in the `redux_saga_workshop/browserslist` file that is used for autoprefixing CSS.
 
+Sources:
+ - Used [Redux Todo Example](http://redux.js.org/docs/basics/ExampleTodoList.html) as reference for the Todo example.
+
 
 ## Setting up development
 

@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 
 import withPage from 'decorators/withPage';
 
-import CounterDisplay from 'components/Counter';
+import CounterDisplay from 'containers/CounterDisplay';
 
 
 const Counter = () => (
