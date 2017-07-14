@@ -1,17 +1,19 @@
-import {take, fork, cancel} from 'redux-saga/effects';
+import {take, fork, cancel, select} from 'redux-saga/effects';
 
 // page sagas
-import {SAGA_PAGE_LOAD, SAGA_PAGE_UNLOAD} from 'actions';
+import {SAGA_PAGE_UNLOAD} from 'actions';
+import counterSagaWatcher from 'sagas/CounterSaga';
 
+
+const locationSelector = ({router: {location}}) => (location);
 
 const matches = [
-    // {filter: /^\/$/g, saga: dashboardPageWatcher},
-    // {filter: /^\/status$/g, saga: statusPageWatcher},
+    {filter: /^\/counter/g, saga: counterSagaWatcher},
 ];
 
 export default function* PageManager() {
     while (true) {
-        const {location} = yield take(SAGA_PAGE_LOAD);
+        const location = yield select(locationSelector);
         const result = matches.find(item => location.pathname.match(item.filter));
 
         let currentPageSaga = null;

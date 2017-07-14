@@ -13,7 +13,10 @@ const NavigationBar = () => (
             </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-            <LinkContainer to="/test">
+            <LinkContainer to="/info">
+                <NavItem>Additional info</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/dummy">
                 <NavItem>Test URL</NavItem>
             </LinkContainer>
         </Nav>

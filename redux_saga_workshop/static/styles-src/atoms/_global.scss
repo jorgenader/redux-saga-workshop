@@ -1,5 +1,16 @@
+@import "../vendors/bootstrap";
 
 body {
     opacity: 1;
     background: #F8F9F9;
+}
+
+.page-container {
+    margin-top: calc(#{$navbar-height} + #{$navbar-margin-bottom});
+
+    @extend .container;
+
+    &.counter-page {
+        margin-top: calc(50vh - 100px);
+    }
 }

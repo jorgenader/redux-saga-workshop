@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Raven from 'raven-js';
 
 import {Provider} from 'react-redux';
-import {BrowserRouter} from 'react-router-dom';
+import {ConnectedRouter} from 'react-router-redux';
 import {AppContainer} from 'react-hot-loader';
 
 import App from 'containers/App';
@@ -28,20 +28,20 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // We want to handle scroll restoration on our own (this only really works in Chrome)
-// So sry Chrome users
+// So sorry Chrome users
 if ('scrollRestoration' in window.history) {
     window.history.scrollRestoration = 'manual';
 }
 
-const store = configureStore();
+const {store, history} = configureStore();
 
 const render = (Component) => {
     ReactDOM.render(
         <AppContainer>
             <Provider store={store}>
-                <BrowserRouter>
+                <ConnectedRouter history={history}>
                     <Component />
-                </BrowserRouter>
+                </ConnectedRouter>
             </Provider>
         </AppContainer>,
         document.getElementById('root'));

@@ -1,4 +1,6 @@
 import {createStore, applyMiddleware, compose} from 'redux';
+import createHistory from 'history/createBrowserHistory';
+import {routerMiddleware as routerMiddlewareFactory} from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 import {createLogger} from 'redux-logger';
 
@@ -17,8 +19,12 @@ const storeEnhancers = [];
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
+// create router middleware
+const history = createHistory();
+const routerMiddleware = routerMiddlewareFactory(history);
+
 // create list of middleware to spread latter, makes easier way to add based on environment
-const middlewares = [sagaMiddleware];
+const middlewares = [sagaMiddleware, routerMiddleware];
 
 // if not production, add redux logger
 if (process.env.NODE_ENV !== 'production') {
@@ -51,5 +57,8 @@ export default function configureStore() {
     }
     /* eslint-enable */
 
-    return store;
+    return {
+        store,
+        history,
+    };
 }
