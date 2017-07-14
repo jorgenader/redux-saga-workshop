@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    Hello world!
+{% endblock content %}
+
+{% block scripts %}{{ block.super }}
+    <script>
+        redux_saga_workshop.init();
+    </script>
+{% endblock %}
+

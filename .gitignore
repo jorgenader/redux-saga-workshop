@@ -1,0 +1,23 @@
+# Ignore everything in .idea
+.idea
+
+*.mo
+*.pyo
+*.pyc
+.sass-cache/
+npm-debug.log
+node_modules/
+venv/
+.cache/
+
+.data-*/
+
+redux_saga_workshop/settings/local.py
+redux_saga_workshop/db.sqlite3
+redux_saga_workshop/app/webpack-stats.json
+redux_saga_workshop/app/build/
+redux_saga_workshop/assets/
+
+redux_saga_workshop/.cache
+redux_saga_workshop/.coverage
+redux_saga_workshop/cover/

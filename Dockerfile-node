@@ -1,0 +1,16 @@
+# Based on Node 6.10 LTS image
+FROM node:6.10.2
+
+# Set the default directory where CMD will execute
+WORKDIR /app
+
+# Copy some utility files
+COPY ./redux_saga_workshop/.babelrc .
+COPY ./redux_saga_workshop/.eslintrc .
+COPY ./redux_saga_workshop/.eslintignore .
+# Install node requirements
+COPY ./redux_saga_workshop/package.json .
+RUN npm install
+
+# Set the default command to execute when creating a new container
+CMD npm run build

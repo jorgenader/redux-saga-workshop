@@ -1,0 +1,4 @@
+redux_saga_workshop/node_modules/
+venv/
+
+.data-*/

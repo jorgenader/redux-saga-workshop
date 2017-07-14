@@ -1,0 +1,7 @@
+from settings.test import *
+
+DATABASES['default']['HOST'] = '127.0.0.1'
+DATABASES['default']['USER'] = 'redux_saga_workshop'
+DATABASES['default']['PASSWORD'] = 'redux_saga_workshop'
+
+CACHES['default']['LOCATION'] = "redis://127.0.0.1:6379/1"
