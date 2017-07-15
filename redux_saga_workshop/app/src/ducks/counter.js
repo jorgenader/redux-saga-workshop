@@ -15,3 +15,6 @@ export default function reducer(state = 0, action) {
 export const actions = {
     setCounter: value => ({type: SET, value}),
 };
+
+
+export const selectCounter = ({counter}) => counter;

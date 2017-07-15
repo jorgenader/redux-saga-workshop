@@ -3,16 +3,20 @@ import uuid from 'uuid';
 
 const SET_VISIBILITY_FILTER = 'todos/SET_VISIBILITY_FILTER';
 const TOGGLE_TODO = 'todos/TOGGLE_TODO';
-const ADD_TODO = 'todos/ADD_TODO';
+const CREATE_TODO = 'todos/CREATE_TODO';
+const DELETE_TODO = 'todos/DELETE_TODO';
 
 
 function todos(state = [], action) {
     switch (action.type) {
-        case ADD_TODO:
+        case CREATE_TODO:
             return [
-                ...state,
-                {id: action.id, text: action.text, completed: false},
+                ...state.filter(todo => todo.id !== action.id),
+                {id: action.id, text: action.text, completed: action.completed},
             ];
+
+        case DELETE_TODO:
+            return state.filter(todo => todo.id !== action.id);
 
         case TOGGLE_TODO:
             return state.map((todo) => {
@@ -44,13 +48,13 @@ function visibilityFilter(state = VISIBILITY_FILTERS.ALL, action) {
     }
 }
 
-
 export default combineReducers({
     todos,
     visibilityFilter,
 });
 
-export const addTodo = text => ({type: ADD_TODO, text, id: uuid.v4()});
+export const createTodo = (id, text, completed) => ({type: CREATE_TODO, id, text, completed});
+export const deleteTodo = id => ({type: DELETE_TODO, id});
 export const toggleTodo = id => ({type: TOGGLE_TODO, id});
 export const setVisibilityFilter = filter => ({type: SET_VISIBILITY_FILTER, filter});
 

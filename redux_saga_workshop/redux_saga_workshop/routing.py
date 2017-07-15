@@ -2,7 +2,7 @@ from channels.routing import route_class
 from channels.generic.websockets import WebsocketDemultiplexer
 
 # from accounts.bindings import UserDataBinding
-# from todos.bindings import TodoDataBinding
+from todos.bindings import TodoDataBinding
 
 
 class Demultiplexer(WebsocketDemultiplexer):
@@ -10,6 +10,7 @@ class Demultiplexer(WebsocketDemultiplexer):
 
     # add bindings {stream: Binding.consumer}
     consumers = {
+        'todos': TodoDataBinding.consumer,
     }
 
 

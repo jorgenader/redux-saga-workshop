@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {addTodo} from 'ducks/todos';
+import {triggerAddTodo} from 'sagas/TodosSaga';
 
 
 class AddTodo extends React.Component {
@@ -35,7 +35,7 @@ class AddTodo extends React.Component {
 
 
 const mapDispatchToProps = dispatch => ({
-    onAddTodo: text => dispatch(addTodo(text)),
+    onAddTodo: text => dispatch(triggerAddTodo(text)),
 });
 
 const AddTodoConnector = connect(

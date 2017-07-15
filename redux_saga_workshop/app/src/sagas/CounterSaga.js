@@ -1,6 +1,7 @@
-import {select, put, all, takeLatest, takeEvery} from 'redux-saga/effects';
+import {delay} from 'redux-saga';
+import {select, put, call, all, takeLatest, takeEvery} from 'redux-saga/effects';
 
-import {actions} from 'ducks/counter';
+import {actions, selectCounter} from 'ducks/counter';
 
 const TRIGGER_INCREASE = 'trigger/counter/increase';
 const TRIGGER_DECREASE = 'trigger/counter/decrease';
@@ -10,22 +11,29 @@ export const triggerIncrease = () => ({type: TRIGGER_INCREASE});
 export const triggerDecrease = () => ({type: TRIGGER_DECREASE});
 export const triggerReset = () => ({type: TRIGGER_RESET});
 
-const selectCounter = ({counter}) => counter;
-
-function* increase() {
+export function* increase() {
     const counter = yield select(selectCounter);
-    yield put(actions.setCounter(counter + 1));
+    yield put(actions.setCounter(counter + 100));
 }
 
-function* decrease() {
+export function* decrease() {
     const counter = yield select(selectCounter);
     if (counter > 0) {
         yield put(actions.setCounter(counter - 1));
     }
 }
 
-function* reset() {
-    yield put(actions.setCounter(0));
+export function* reset() {
+    let counter = yield select(selectCounter);
+    let i = counter;
+
+    while (i >= 0) {
+        yield put(actions.setCounter(i));
+        yield call(delay, 1000);
+        counter = yield select(selectCounter);
+        i = counter;
+        i -= 1;
+    }
 }
 
 export default function* rootSaga() {

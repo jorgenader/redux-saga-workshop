@@ -5,17 +5,18 @@ import uuid from 'uuid';
 /**
  * Django Channels Connection service
  *
- * Expects connection through demultiplexer
+ * Expects connection through demultiplexer.
  */
 export default class ChannelsService extends EventEmitter {
     /**
      * Create Channel Service
-     * @param url
+     * @param {string} url - path to connect to.
+     * @param {Object} options - Additional options for Service.
      * @returns {Promise}
      */
-    static createService(url) {
+    static createService(url, options) {
         return new Promise((resolve, reject) => {
-            const connection = new ChannelsService(url);
+            const connection = new ChannelsService(url, options);
 
             connection.socket.addEventListener('error', reject);
             connection.once('connect', () => {
@@ -25,45 +26,75 @@ export default class ChannelsService extends EventEmitter {
         });
     }
 
+    /**
+     * Generate UUID for request to be able to handle only correct message.
+     * @returns {string} - Unique ID.
+     */
     static generateUUID() {
         return uuid.v4();
     }
 
+    /**
+     * Instantiate Service object.
+     * @param url - Full path to server, uses current `window.location.host` as base URI.
+     */
     constructor(url) {
         super();
 
         const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
         this.socket = new ReconnectingWebSocket(`${scheme}//${window.location.host}/${url}`);
+        this.connected = false;
 
         this.socket.onopen = () => {
             this.init();
-            this.socket.onopen = undefined;
         };
         this.socket.onclose = (e) => {
             this.emit('close', e);
         };
     }
 
+    /**
+     * Called after connection is established.
+     *
+     * Emits: `connect` when connection is created.
+     */
     init() {
-        const onSubscribers = (jsonMessage) => {
-            if (!jsonMessage.data) {
-                return;
-            }
-            const message = JSON.parse(jsonMessage.data);
-            if (message.payload && !message.payload.request_id) {
-                this.emit('notification', message);
-            }
-        };
+        // when reconnecting, we don't need to recreate notification listener
+        if (!this.connected) {
+            const onSubscribers = (jsonMessage) => {
+                if (!jsonMessage.data) {
+                    return;
+                }
+                const message = JSON.parse(jsonMessage.data);
+                if (message.payload && !message.payload.request_id) {
+                    this.emit('notification', message);
+                }
+            };
 
-        this.addEventListener('notification', onSubscribers);
-        this.emit('connect');
+            this.addEventListener('notification', onSubscribers);
+        }
+
+        // only emit when connection is ready
+        if (this.socket.readyState === 1) {
+            this.connected = true;
+            this.emit('connect');
+        }
     }
 
+    /**
+     * Close WebSocket and remove all listeners.
+     */
     close() {
         this.removeAllListeners();
         this.socket.close();
     }
 
+    /**
+     * Format outgoing message.
+     * @param {string} stream - Stream name
+     * @param {Object} payload - Payload to send
+     * @returns {Object} Formatted message - {{stream: *, payload: {request_id: string, *}}}
+     */
     static createMessage(stream, payload) {
         return {
             stream,
@@ -71,6 +102,12 @@ export default class ChannelsService extends EventEmitter {
         };
     }
 
+    /**
+     * Subscribe for event.
+     * @param {string} stream - Stream name.
+     * @param {string} action - Event action to subscribe for.
+     * @param {Number} [pk] - Optionally subscribe only for single Model object.
+     */
     subscribe(stream, action, pk = undefined) {
         const message = {
             stream,
@@ -85,6 +122,12 @@ export default class ChannelsService extends EventEmitter {
         this.socket.send(JSON.stringify(message));
     }
 
+    /**
+     * Send message to server and receive correct message.
+     * @param stream
+     * @param payload
+     * @returns {Promise.<{result}>}
+     */
     send(stream, payload) {
         const message = ChannelsService.createMessage(stream, payload);
         return new Promise((resolve, reject) => {
@@ -114,10 +157,18 @@ export default class ChannelsService extends EventEmitter {
             .catch(error => ({error}));
     }
 
+    /**
+     * Add Subscriber callback
+     * @param {function} cb
+     */
     addSubscriber(cb) {
         this.on('notification', cb);
     }
 
+    /**
+     * Remove Subscriber callback
+     * @param {function} cb
+     */
     removeSubscriber(cb) {
         this.removeListener('notification', cb);
     }
