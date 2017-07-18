@@ -197,7 +197,11 @@ const Presentation = () => (
             </Appear>
         </Slide>
         <Slide>
-            {/* Last slide */}
+            <Heading size={1} fit caps lineHeight={1}>
+                Questions?
+            </Heading>
+        </Slide>
+        <Slide>
             <Heading size={1} fit caps lineHeight={1}>
                 Workshop time
             </Heading>
