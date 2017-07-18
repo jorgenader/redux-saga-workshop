@@ -24,3 +24,18 @@ from settings.base import *
 # Uncomment to send emails from your local machine.
 # EMAIL_HOST_PASSWORD = 'TODO (api key)'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Docker override's
+# if socket.gethostname() == 'OVER_NIX':
+#     REDIS_HOST = 'localhost'
+#     REDIS_PORT = 6379
+#     REDIS_URL = 'redis://%s:%d/%d' % (REDIS_HOST, REDIS_PORT, REDIS_DB)
+#
+#     # Channels
+#     CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(REDIS_HOST, REDIS_PORT)]
+#
+#     # Caching
+#     CACHES['default']['LOCATION'] = REDIS_URL
+#
+#     # Media root
+#     MEDIA_ROOT = os.path.join(os.path.dirname(SITE_ROOT), '.data-media')
