@@ -1,10 +1,11 @@
 import {eventChannel} from 'redux-saga';
-import {take, fork, race} from 'redux-saga/effects';
+import {take, put, fork, race, actionChannel} from 'redux-saga/effects';
 
 import Channels from 'services/channels';
 import {processData} from 'sagas/DataProcessingSaga';
 
 const OUTGOING_STREAM = 'channels/OUTGOING_STREAM';
+export const CONNECTED = 'channels/CONNECTED';
 
 export const pushData = (stream, payload) => ({
     type: OUTGOING_STREAM, stream, payload,
@@ -45,17 +46,21 @@ function* sendPayload(service, data) {
     yield fork(processData, result, error);
 }
 
-export default function* (mocked = false) {
-    const channelsService = yield Channels.createService('/stream', {mocked});
+export default function* () {
+    // create buffered channel to not miss any messages
+    const requestChannel = yield actionChannel(OUTGOING_STREAM);
+    // connect to server service
+    const channelsService = yield Channels.createService('stream');
+    // handle all notifications
     const notificationsChannel = yield createEventChannel(channelsService);
 
     try {
+        yield put({type: CONNECTED});
         while (true) {
             const {incoming, outgoing} = yield race({
                 incoming: yield take(notificationsChannel),
-                outgoing: yield take(OUTGOING_STREAM),
+                outgoing: yield take(requestChannel),
             });
-
             if (outgoing) {
                 // fork this so that this saga would always be available to take in data
                 yield fork(sendPayload, channelsService, outgoing);

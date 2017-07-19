@@ -149,7 +149,7 @@ const Presentation = () => (
         </Slide>
         <Slide>
             <Heading size={1} fit caps lineHeight={1}>
-                What how does it work?
+                How does it work?
             </Heading>
             <Appear>
                 <Text textSize="1em" textColor="secondary">

@@ -11,12 +11,11 @@ export default class ChannelsService extends EventEmitter {
     /**
      * Create Channel Service
      * @param {string} url - path to connect to.
-     * @param {Object} options - Additional options for Service.
      * @returns {Promise}
      */
-    static createService(url, options) {
+    static createService(url) {
         return new Promise((resolve, reject) => {
-            const connection = new ChannelsService(url, options);
+            const connection = new ChannelsService(url);
 
             connection.socket.addEventListener('error', reject);
             connection.once('connect', () => {
@@ -41,7 +40,7 @@ export default class ChannelsService extends EventEmitter {
     constructor(url) {
         super();
 
-        const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const scheme = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         this.socket = new ReconnectingWebSocket(`${scheme}//${window.location.host}/${url}`);
         this.connected = false;
 

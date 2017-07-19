@@ -3,12 +3,14 @@ import {take, fork, cancel, select} from 'redux-saga/effects';
 // page sagas
 import {SAGA_PAGE_LOAD, SAGA_PAGE_UNLOAD} from 'actions';
 import counterSagaWatcher from 'sagas/CounterSaga';
+import todoSagaWatcher from 'sagas/TodosSaga';
 
 
 const locationSelector = ({router: {location}}) => (location);
 
 const matches = [
     {filter: /^\/counter/g, saga: counterSagaWatcher},
+    {filter: /^\/todos/g, saga: todoSagaWatcher},
 ];
 
 export default function* PageManager() {
